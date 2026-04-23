@@ -1,0 +1,8 @@
+# Netlify / Cloudflare Pages SPA fallback.
+#
+# IMPORTANT: this rule is ONLY applied when no static file matches. The prerender
+# step writes dist/one-ring/index.html, dist/envy/index.html, etc. — those static
+# files are served first, so crawlers (Discord, Google, Twitter) see per-route
+# meta. Only genuinely unknown paths fall through to the homepage shell for
+# client-side routing.
+/*    /index.html   200

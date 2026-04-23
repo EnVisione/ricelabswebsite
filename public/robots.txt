@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rice-labs.enviouse.com/sitemap.xml

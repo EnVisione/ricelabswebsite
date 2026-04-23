@@ -1,0 +1,16 @@
+# Cloudflare Pages / Netlify cache headers.
+#
+# HTML: never cache — so meta / prerendered content updates propagate instantly.
+# Hashed JS/CSS assets: cache forever (their hash changes when content changes).
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Robots-Tag: index, follow
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

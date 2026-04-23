@@ -1,0 +1,13 @@
+{
+  "name": "RiceLabs — Minecraft Modpacks & Mods",
+  "short_name": "RiceLabs",
+  "description": "Two-person studio by NitroRiced & EnVy building deeply immersive, hand-polished Minecraft modpacks. 35M+ downloads.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d0f",
+  "theme_color": "#7CC242",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/og-image.jpg", "type": "image/jpeg", "sizes": "1200x630", "purpose": "any" }
+  ]
+}
