@@ -71,8 +71,10 @@ const HELP_LINES = [
   '  fortune           → random minecraft proverb',
   '  echo <msg>        → print <msg>',
   '  sudo coffee       → essential',
-  '  ring              → ???',
+  '  origins           → ???',
   '  secret            → ??????????',
+  '  gandalf           → ?????????????',
+  '  mordor            → ??????????????',
   '  clear             → wipe the screen',
 ]
 
@@ -155,7 +157,7 @@ export default function Terminal() {
             t: 'out',
             v: `  ${slug.padEnd(34)} ${p.dl.padStart(6)} downloads`,
           })),
-          { t: 'out-gold', v: '  over-stars-the-one-ring/ (in development)' },
+          { t: 'out-gold', v: '  over-stars-origins-of-indestructium/ (in development)' },
         ])
         return
 
@@ -168,7 +170,7 @@ export default function Terminal() {
           })),
           { t: 'out', v: '├── collabs/' },
           { t: 'out', v: '│   ├── over-stars         (with nitro)' },
-          { t: 'out', v: '│   └── the-one-ring       (with nitro · in dev)' },
+          { t: 'out', v: '│   └── origins-of-indestructium (with nitro · in dev)' },
           { t: 'out', v: '└── infra/' },
           { t: 'out', v: '    ├── over-stars-server  (uptime 42d)' },
           { t: 'out', v: '    └── ricelabs-site      (you are here)' },
@@ -288,9 +290,10 @@ export default function Terminal() {
         }
         return
 
-      case 'ring':
+      case 'origins':
+      case 'indestructium':
         push([
-          { t: 'out-gold', v: '"…in the darkness bind them."' },
+          { t: 'out-gold', v: '"…and in the darkness bind them."' },
           { t: 'out', v: "Try 'secret'." },
         ])
         return
@@ -298,6 +301,30 @@ export default function Terminal() {
       case 'secret':
       case 'secret-mode':
         runSecret()
+        return
+
+      case 'gandalf':
+      case 'wizard':
+      case 'youshallnotpass':
+      case 'you-shall-not-pass':
+        window.dispatchEvent(new Event('ricelabs:gandalf'))
+        push([
+          { t: 'out-gold', v: '"A wizard is never late, Frodo Baggins."' },
+          { t: 'gold-glow', v: 'YOU. SHALL. NOT. PASS!' },
+          { t: 'err', v: '*** the Balrog of Moria has been bonked. ***' },
+          { t: 'out', v: 'Fly, you fools.' },
+        ])
+        return
+
+      case 'mordor':
+      case 'eye':
+      case 'sauron':
+        window.dispatchEvent(new Event('ricelabs:mordor'))
+        push([
+          { t: 'err', v: '"One does not simply walk into Mordor."' },
+          { t: 'rainbow', v: 'A great Eye, lidless, wreathed in flame.' },
+          { t: 'out', v: '(toggle: run again to look away.)' },
+        ])
         return
 
       case 'clear':
@@ -337,7 +364,11 @@ export default function Terminal() {
       { t: 'gold-glow', v: 'One Ring to rule them all, One Ring to find them,' },
       { t: 'gold-glow', v: 'One Ring to bring them all, and in the darkness bind them.' },
       { t: 'out', v: '' },
-      { t: 'out-green', v: '→ follow the forge: /one-ring' },
+      { t: 'out', v: '— in the lands of Mordor where the Shadows lie.' },
+      { t: 'out', v: '' },
+      { t: 'out-green', v: '→ three hundred years before the Stars were Over,' },
+      { t: 'out-green', v: '  a journeyman walked the path alone, and never came back.' },
+      { t: 'out-green', v: '→ follow the forge: /ool' },
     ])
   }
 

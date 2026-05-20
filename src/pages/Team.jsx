@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import MinecraftSkin from '../components/MinecraftSkin.jsx'
 import { useTotalDownloads, useAllProjects, fmt } from '../hooks/useCurseForge.js'
 import { PROJECTS } from '../data/projects.js'
+import { SKINS } from '../constants.js'
 
 function sumDownloads(list, cf) {
   let t = 0
@@ -20,9 +21,11 @@ export default function Team() {
 
   const envyProjects = PROJECTS.filter((p) => (p.owner === 'envy' || p.owner === 'both') && p.cf)
   const nitroProjects = PROJECTS.filter((p) => (p.owner === 'nitro' || p.owner === 'both') && p.cf)
+  const bananeProjects = PROJECTS.filter((p) => p.owner === 'banane' && p.cf)
 
   const envyDownloads = sumDownloads(envyProjects, cf)
   const nitroDownloads = sumDownloads(nitroProjects, cf)
+  const bananeDownloads = sumDownloads(bananeProjects, cf)
 
   return (
     <>
@@ -30,7 +33,7 @@ export default function Team() {
         <div className="section-label">◆ ABOUT US</div>
         <h1 style={{ marginBottom: 16 }}>RICE / LABS</h1>
         <p style={{ fontSize: 16, maxWidth: '72ch' }}>
-          Two devs. One forge. RiceLabs is a small, hand-crafted Minecraft modpack studio.
+          Three devs. One forge. Rice Labs is a small, hand-crafted Minecraft modpack studio.
           We don't ship kitchen-sink packs — every quest is written, every balance pass personal,
           every release tested on the same servers our community plays on. Since 2022.
         </p>
@@ -38,7 +41,7 @@ export default function Team() {
           <div className="tag accent">EST. NOV 2022</div>
           <div className="tag">{totalLabel} DOWNLOADS</div>
           <div className="tag">{projectCount} PROJECTS</div>
-          <div className="tag gold">2 DEVS</div>
+          <div className="tag gold">3 DEVS</div>
         </div>
       </section>
 
@@ -48,26 +51,26 @@ export default function Team() {
         <div className="team-grid">
           <Link className="team-card team-card-nitro" to="/nitro">
             <div className="team-skin">
-              <MinecraftSkin username="Nitroriced" variant="body" size={170} className="mc-skin-img" />
+              <MinecraftSkin username={SKINS.nitro} variant="body" size={170} className="mc-skin-img" />
               <div className="team-level">LVL 99</div>
             </div>
             <div className="team-body">
-              <div className="tag gold">CEO</div>
+              <div className="tag accent">CEO</div>
               <h3>NITRORICED</h3>
               <div className="mono muted" style={{ fontSize: 11, marginTop: 4 }}>Creative · Content · Direction</div>
-              <p>The mind behind Over Stars and the Immersed series. YouTube creator, lore architect, community shepherd. If you've played a RiceLabs pack, you've seen his world.</p>
+              <p>The mind behind the modpacks, Immersed With Shaders, Over Stars, you name it. YouTube creator, lore architect, community shepherd. If you've played a Rice Labs pack, you've seen his world.</p>
               <div className="team-stats">
-                <div><span className="pixel gold">{nitroDownloads ? fmt(nitroDownloads) : '…'}</span><small>Downloads</small></div>
-                <div><span className="pixel gold">{nitroProjects.length}</span><small>Projects</small></div>
-                <div><span className="pixel gold">305</span><small>Followers</small></div>
+                <div><span className="pixel accent">{nitroDownloads ? fmt(nitroDownloads) : '…'}</span><small>Downloads</small></div>
+                <div><span className="pixel accent">{nitroProjects.length}</span><small>Projects</small></div>
+                <div><span className="pixel accent">305</span><small>Followers</small></div>
               </div>
-              <div className="team-cta gold">VIEW PROFILE →</div>
+              <div className="team-cta">VIEW PROFILE →</div>
             </div>
           </Link>
 
           <Link className="team-card team-card-envy" to="/envy">
             <div className="team-skin">
-              <MinecraftSkin username="EnVyOnMyMind" variant="body" size={170} className="mc-skin-img" />
+              <MinecraftSkin username={SKINS.envy} variant="body" size={170} className="mc-skin-img" />
               <div className="team-level">LVL 99</div>
             </div>
             <div className="team-body">
@@ -81,6 +84,25 @@ export default function Team() {
                 <div><span className="pixel red">MODS</span><small>Developer</small></div>
               </div>
               <div className="team-cta red">VIEW PROFILE →</div>
+            </div>
+          </Link>
+
+          <Link className="team-card team-card-banane" to="/banane">
+            <div className="team-skin">
+              <MinecraftSkin username={SKINS.banane} variant="body" size={170} className="mc-skin-img" />
+              <div className="team-level">LVL 99</div>
+            </div>
+            <div className="team-body">
+              <div className="tag gold">CO-DEV</div>
+              <h3>BANANE</h3>
+              <div className="mono muted" style={{ fontSize: 11, marginTop: 4 }}>Modpacks · Resource Packs · Co-Dev</div>
+              <p>The "All in one" creator. Builds themed modpacks and a stable of clean, focused resource packs. 3.1M+ downloads of his own work, and a Rice Labs founder since day one.</p>
+              <div className="team-stats">
+                <div><span className="pixel gold">{bananeDownloads ? fmt(bananeDownloads) : '…'}</span><small>Downloads</small></div>
+                <div><span className="pixel gold">{bananeProjects.length}</span><small>Projects</small></div>
+                <div><span className="pixel gold">13</span><small>Followers</small></div>
+              </div>
+              <div className="team-cta gold">VIEW PROFILE →</div>
             </div>
           </Link>
         </div>
@@ -118,7 +140,7 @@ export default function Team() {
               ['accent', '5', 'Planets (OS)'],
               ['gold', '305', 'Followers'],
               ['purple', '4', 'Years shipping'],
-              ['danger', '2', 'Humans'],
+              ['danger', '3', 'Humans'],
             ].map(([c, v, l], i) => (
               <div key={i} className="stat-box">
                 <div className={'pixel stat-v ' + (c === 'danger' ? '' : c)} style={c === 'danger' ? { color: '#e0533d' } : undefined}>{v}</div>
@@ -135,10 +157,10 @@ export default function Team() {
         <div className="era-grid">
           {[
             ['2022', 'Chapter I · The First Blocks', 'Immersed With Shaders launches. A client-side visual pack with shaders, FPS and sound. Grows fast — the modpack that started it all.'],
-            ['2023', 'Chapter II · Immersion Expands', "Immersed With Nature, Clean Swords, Simplistic GUI — the studio's catalog grows. Resource packs, UI polish, a voice forming."],
-            ['2024', 'Chapter III · Sharpening Tools', 'Crosshairs, armour bar, bubbles — a suite of minimal HUD packs. Downloads cross 10M combined. Groundwork being laid.'],
-            ['2025', 'Chapter IV · Over Stars', 'The first full RiceLabs modpack with a story. Tech-RPG progression, villager contracts, and a hand-written campaign. 320K+ downloads.'],
-            ['2026', 'Chapter V · The One Ring', 'The Over Stars universe deepens. A 300-year prequel. Ancient alloys. Forbidden ring. Development begins.', true],
+            ['2023', 'Chapter II · The Labs Expands', "Immersed With Nature, Clean Swords, Simplistic GUI — the studio's catalog grows. Resource packs, UI polish, a voice forming. The official Rice Labs discord establishses. Over Stars begins development."],
+            ['2024', 'Chapter III · Sharpening Tools', 'Crosshairs, armour bar, bubbles — a suite of minimal HUD packs. Downloads cross 10M combined. Groundwork being laid. Over Stars development in full-swing.'],
+            ['2025', 'Chapter IV · Over Stars', 'Over Stars released in April, the first full Rice Labs modpack with a story. Tech-RPG progression, villager contracts, custom RPG questing system, and a hand-written campaign. 320K+ downloads. The infamous EnVy joins the Labs.'],
+            ['2026', 'Chapter V · Origins of Indestructium', 'The Over Stars universe deepens. A 300-year prequel. Ancient alloys. Forbidden ring. Lore-driven campaign and storyline. Development begins.', true],
           ].map(([year, title, body, accent]) => (
             <div key={year} className={'era ' + (accent ? 'accent-era' : '')}>
               <div className="era-year pixel">{year}</div>

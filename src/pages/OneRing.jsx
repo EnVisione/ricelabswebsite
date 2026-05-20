@@ -15,20 +15,15 @@ export default function OneRing() {
         <div className="or-hero-inner">
           <div className="tag purple">◆ EARLY DEV · SNEAK PEEK</div>
           <h1 className="or-title">
-            <span className="cinzel">Over Stars</span>
+            <span className="cinzel ooi-cyan">Over Stars</span>
             <br />
-            <span className="gold">: The One Ring</span>
+            <span className="ooi-magenta">: Origins of Indestructium</span>
           </h1>
           <p className="or-lede">
-            A Lord of the Rings–inspired journey, set <strong className="gold">300 years before</strong> the events of the original Over Stars modpack and the discovery of the Orb of Existence.
+            A Lord of the Rings–inspired journey, set <strong className="ooi-cyan">300 years before</strong> the events of the original Over Stars modpack and the discovery of the Orb of Existence.
           </p>
           <div className="or-ring-wrap">
-            <div className="or-ring">
-              <div className="or-ring-glow"></div>
-              <div className="or-ring-band"></div>
-              <div className="or-ring-inner"></div>
-              <div className="or-ring-runes pixel">ᛟ · ᚱ · ᛁ · ᚲ · ᛖ · ᛚ · ᚨ · ᛒ · ᛋ · ᛟ · ᚱ · ᛁ · ᚲ · ᛖ</div>
-            </div>
+            <img src="/TheOneRing.gif" alt="The One Ring" className="or-ring-gif" />
           </div>
         </div>
       </section>
@@ -41,19 +36,19 @@ export default function OneRing() {
             A folkloric curse bound within its otherworldly forgery.
             Forbidden abilities &mdash; at the cost of evil side effects.
           </p>
-          <div className="quote-attr mono">&mdash; Announcement · RiceLabs, 2026</div>
+          <div className="quote-attr mono">&mdash; Announcement · RiceLabs, March 2026</div>
         </div>
       </section>
 
       <section className="container or-container">
         <div className="or-cols">
           <div>
-            <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ THE PREMISE</div>
+            <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ THE PREMISE</div>
             <h2 style={{ marginBottom: 16 }}>A JOURNEY, UNFINISHED</h2>
             <p>
-              You embark on an exhilarating, momentous journey to uncover the ring's myth-enveloped lore and origins &mdash;
+              You'll embark on an exhilarating, momentous journey to uncover the ring's myth-enveloped lore and origins &mdash;
               following the footsteps of a previous journeyman who took on the task, and could not achieve what he set out to do,
-              due to his <strong className="gold">mysterious disappearance</strong>&hellip;
+              due to his <strong className="ooi-magenta">mysterious disappearance</strong>&hellip;
             </p>
             <p style={{ marginTop: 14 }}>
               This is not <em>Over Stars 2</em>. This is the lore beneath the lore &mdash; the era the Orb of Existence has never told you about.
@@ -63,10 +58,10 @@ export default function OneRing() {
           <div className="or-premise-card">
             {[
               ['SETTING', 'Fantasy / mythological prequel'],
-              ['ERA', <span className="gold" key="era">300 years before Over Stars</span>],
-              ['TONE', 'Folkloric · eldritch · Tolkien-inspired'],
-              ['CAMPAIGN', 'Lore-rich · progressive · story-first'],
-              ['THE RING', <span className="accent" key="ring">Ancient · forbidden · cursed</span>],
+              ['ERA', <span className="ooi-cyan" key="era">300 years before Over Stars</span>],
+              ['TONE', 'Folkloric · Eldritch · Tolkien-inspired'],
+              ['CAMPAIGN', 'Lore-rich · Progressive · Story-driven'],
+              ['THE RING', <span className="ooi-magenta" key="ring">Ancient · Forbidden · Cursed</span>],
               ['STATUS', <span style={{ color: '#e0533d' }} key="status">Early development</span>],
             ].map(([label, val], i) => (
               <div key={i} className="or-pc-row">
@@ -79,14 +74,14 @@ export default function OneRing() {
       </section>
 
       <section className="container or-container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ PILLARS</div>
+        <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ PILLARS</div>
         <h2 style={{ marginBottom: 28 }}>WHAT MAKES IT DIFFERENT</h2>
         <div className="pillars-grid">
           {[
             ['I', 'AN ELDRITCH RING', 'Forged by unknown alloys, by unknown creators. Grants forbidden abilities — at the cost of evil side effects bound within its otherworldly forgery.'],
             ['II', 'A FOLKLORIC WORLD', 'A fantastical, mythological realm unlike the tech-leaning Over Stars original. Ancient sites, old magic, older secrets.'],
-            ['III', 'LORE-DRIVEN CAMPAIGN', "Progressive, hand-written questline. Follow a lost journeyman's footsteps and complete what he could not."],
-            ['IV', 'A SEQUEL, UNLIKE ANY', 'Not Over Stars 2. A sibling pack set three centuries earlier, with its own identity, its own heroes, its own myths.'],
+            ['III', 'LORE-DRIVEN CAMPAIGN', "Progressive, hand-written questline. Immersive cutscene lore like never seen before, following a lost journeyman's footsteps to complete what he could not."],
+            ['IV', 'A SEQUEL, UNLIKE ANY', 'Not Over Stars 2. A sibling pack set three centuries earlier, with its own identity, its own heroes, its own myths, its own origins.'],
           ].map(([num, title, body]) => (
             <div className="pillar" key={num}>
               <div className="pillar-num pixel">{num}</div>
@@ -99,21 +94,21 @@ export default function OneRing() {
 
       <section className="container or-container">
         <div className="card or-progress-card">
-          <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ PROGRESS</div>
+          <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ PROGRESS</div>
           <h2 style={{ marginBottom: 24 }}>FROM THE FORGE</h2>
           <div className="or-prog-grid">
             {[
               ['WORLDBUILDING & LORE', 62],
-              ['RING MECHANICS & CUSTOM MODS', 41],
+              ['CUSTOM CONTENT', 41],
               ['QUEST CAMPAIGN', 28],
               ['WORLD GEN & STRUCTURES', 18],
-              ['SOUNDTRACK & AMBIENT', 9],
+              ['CUSTOM SOUNDTRACK', 9],
               ['PLAYTESTING', 0],
             ].map(([label, pct]) => (
               <div className="or-prog" key={label}>
                 <div className="or-prog-head">
                   <span className="pixel" style={{ fontSize: 9 }}>{label}</span>
-                  <span className={pct ? 'mono gold' : 'mono muted'}>{pct ? pct + '%' : '—'}</span>
+                  <span className={pct ? 'mono ooi-cyan' : 'mono muted'}>{pct ? pct + '%' : '—'}</span>
                 </div>
                 <div className="or-prog-bar"><div style={{ width: pct + '%' }}></div></div>
               </div>
@@ -126,7 +121,7 @@ export default function OneRing() {
       </section>
 
       <section className="container or-container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ SNEAK PEEKS</div>
+        <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ SNEAK PEEKS</div>
         <h2 style={{ marginBottom: 16 }}>A FIRST LOOK</h2>
         <p style={{ marginBottom: 24 }}>Early, in-engine captures. Expect everything to change — including these.</p>
         <div className="peeks-grid">
@@ -148,13 +143,13 @@ export default function OneRing() {
       </section>
 
       <section className="container or-container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ ROADMAP</div>
+        <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ ROADMAP</div>
         <h2 style={{ marginBottom: 28 }}>THE PATH AHEAD</h2>
         <div className="rm-grid">
           {[
-            ['done', '✓', 'PLANNING', 'Pitch locked in. Core pillars agreed. Early 2026.'],
-            ['active', '◆', 'EARLY DEVELOPMENT', 'Worldbuilding, ring mechanics, custom mods. You are here.'],
-            ['', '◇', 'ALPHA (@Sneak Peaks)', 'Closed alpha for Discord supporters. Feedback loop opens.'],
+            ['done', '✓', 'PLANNING', 'Pitch locked in. Core pillars agreed. January 2026.'],
+            ['active', '◆', 'EARLY DEVELOPMENT', 'Worldbuilding, cutscene lore, custom content. We are here.'],
+            ['', '◇', 'FINISHING DEVELOPMENT', 'Closing in on testing first iteration. Feedback loop opens.'],
             ['', '◇', 'BETA', 'Wider playtest. Quest polish, balance, bug hunt.'],
             ['', '◇', 'LAUNCH', 'Public release on CurseForge. Date TBA.'],
           ].map(([state, mark, title, body]) => (
@@ -172,15 +167,15 @@ export default function OneRing() {
       <section className="container or-container">
         <div className="or-cta card">
           <div>
-            <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ FOLLOW THE FORGE</div>
+            <div className="section-label" style={{ color: 'var(--ooi-magenta)' }}>◆ FOLLOW THE FORGE</div>
             <h2>Get the @Sneak Peaks role</h2>
             <p style={{ marginTop: 12 }}>
               Want exclusive early peeks, dev snapshots and behind-the-scenes from the campaign? Pick up the{' '}
-              <strong className="gold">@Sneak Peaks</strong> role in our Discord's roles channel.
+              <strong className="ooi-magenta">@Sneak Peaks</strong> role in our Discord's roles channel.
             </p>
           </div>
           <div className="row">
-            <Link className="btn btn-gold" to="/contact">◆ JOIN DISCORD</Link>
+            <Link className="btn btn-ooi" to="/contact">◆ JOIN DISCORD</Link>
             <a className="btn btn-ghost" href="https://www.youtube.com/@NitroRicedYT" target="_blank" rel="noopener noreferrer">WATCH YOUTUBE</a>
           </div>
         </div>

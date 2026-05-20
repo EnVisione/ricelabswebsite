@@ -1,73 +1,136 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-// Secret mode: the One Ring descends onto the page and starts shifting
-// everything. Activated by `window.dispatchEvent(new Event('ricelabs:secret'))`
-// from the terminal. State lives in memory only — refresh wipes it.
+// Easter-egg overlays. Listens for three custom events from the terminal:
+//   ricelabs:secret   → TheOneRing.gif chases the cursor + page goes wacky
+//   ricelabs:gandalf  → "YOU SHALL NOT PASS!" banner pops onscreen
+//   ricelabs:mordor   → toggles a red Eye of Sauron + screen tint
+// State lives in memory only — refresh wipes it.
 export default function SecretMode() {
   const [active, setActive] = useState(false)
-  const [x, setX] = useState(0)
-  const [y, setY] = useState(0)
-  const raf = useRef(0)
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [scale, setScale] = useState(1)
+  const [gandalf, setGandalf] = useState(false)
+  const [mordor, setMordor] = useState(false)
 
-  // Listen for the activation event.
+  const raf = useRef(0)
+  const mouse = useRef({ x: 0, y: 0 })
+  const ring = useRef({ x: 0, y: 0 })
+  const gandalfTimer = useRef(0)
+
+  // Event wiring — once.
   useEffect(() => {
-    const on = () => setActive(true)
-    window.addEventListener('ricelabs:secret', on)
-    return () => window.removeEventListener('ricelabs:secret', on)
+    const onSecret = () => setActive(true)
+    const onGandalf = () => {
+      setGandalf(true)
+      clearTimeout(gandalfTimer.current)
+      gandalfTimer.current = setTimeout(() => setGandalf(false), 4200)
+    }
+    const onMordor = () => setMordor((v) => !v)
+    window.addEventListener('ricelabs:secret', onSecret)
+    window.addEventListener('ricelabs:gandalf', onGandalf)
+    window.addEventListener('ricelabs:mordor', onMordor)
+    return () => {
+      window.removeEventListener('ricelabs:secret', onSecret)
+      window.removeEventListener('ricelabs:gandalf', onGandalf)
+      window.removeEventListener('ricelabs:mordor', onMordor)
+      clearTimeout(gandalfTimer.current)
+    }
   }, [])
 
-  // Toggle the body class + a root-level data attribute so page-wide CSS
-  // overrides can cascade without per-component wiring.
+  // Body classes for page-wide CSS overrides.
   useEffect(() => {
-    if (active) {
-      document.body.classList.add('secret-mode')
-      document.documentElement.dataset.secret = '1'
-    } else {
-      document.body.classList.remove('secret-mode')
-      delete document.documentElement.dataset.secret
-    }
+    document.body.classList.toggle('secret-mode', active)
+    document.documentElement.dataset.secret = active ? '1' : ''
     return () => {
       document.body.classList.remove('secret-mode')
       delete document.documentElement.dataset.secret
     }
   }, [active])
 
-  // Ring drifts slowly — orbits the screen center with a little wander.
+  useEffect(() => {
+    document.body.classList.toggle('mordor-mode', mordor)
+    return () => document.body.classList.remove('mordor-mode')
+  }, [mordor])
+
+  // Mouse-follow ring with smooth lag (the ring chases your cursor).
   useEffect(() => {
     if (!active) return
+    mouse.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+    ring.current = { ...mouse.current }
+
+    const onMove = (e) => {
+      mouse.current = { x: e.clientX, y: e.clientY }
+    }
+    const onTouch = (e) => {
+      const t = e.touches[0]
+      if (t) mouse.current = { x: t.clientX, y: t.clientY }
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('touchmove', onTouch, { passive: true })
+
     let t = 0
     const tick = () => {
       t += 1
-      const cx = window.innerWidth / 2
-      const cy = window.innerHeight / 2
-      setX(cx + Math.sin(t / 160) * 140 + Math.cos(t / 73) * 40)
-      setY(cy + Math.cos(t / 140) * 90 + Math.sin(t / 81) * 30)
+      // Smooth chase with lag — ring drifts toward cursor each frame.
+      ring.current.x += (mouse.current.x - ring.current.x) * 0.09
+      ring.current.y += (mouse.current.y - ring.current.y) * 0.09
+      setPos({ x: ring.current.x, y: ring.current.y })
+      setScale(1 + Math.sin(t / 38) * 0.18)
       raf.current = requestAnimationFrame(tick)
     }
     raf.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf.current)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('touchmove', onTouch)
+      cancelAnimationFrame(raf.current)
+    }
   }, [active])
 
-  if (!active) return null
+  if (!active && !gandalf && !mordor) return null
+
   return createPortal(
-    <div className="secret-layer" aria-hidden="true">
-      <div className="secret-vignette" />
-      <div
-        className="secret-ring"
-        style={{ left: x + 'px', top: y + 'px' }}
-      >
-        <div className="secret-ring-glow" />
-        <div className="secret-ring-band" />
-        <div className="secret-ring-inner" />
-        <div className="secret-ring-runes pixel">
-          ᛟ · ᚱ · ᛁ · ᚲ · ᛖ · ᛚ · ᚨ · ᛒ · ᛋ · ᛟ · ᚱ · ᛁ · ᚲ · ᛖ · ᛚ · ᚨ · ᛒ · ᛋ
+    <>
+      {active && (
+        <div className="secret-layer" aria-hidden="true">
+          <div className="secret-vignette" />
+          <div className="secret-flash" />
+          <div
+            className="secret-ring"
+            style={{
+              left: pos.x + 'px',
+              top: pos.y + 'px',
+              transform: `translate(-50%,-50%) scale(${scale.toFixed(3)})`,
+            }}
+          >
+            <div className="secret-ring-aura" />
+            <img src="/TheOneRing.gif" alt="" className="secret-ring-gif" />
+          </div>
+          <div className="secret-inscription cinzel">
+            ash nazg durbatulûk
+          </div>
         </div>
-      </div>
-      <div className="secret-inscription cinzel">
-        ash nazg durbatulûk
-      </div>
-    </div>,
+      )}
+
+      {gandalf && (
+        <div className="gandalf-overlay" aria-hidden="true">
+          <div className="gandalf-flash" />
+          <div className="gandalf-staff" />
+          <div className="gandalf-banner cinzel">YOU SHALL NOT PASS!</div>
+        </div>
+      )}
+
+      {mordor && (
+        <div className="mordor-overlay" aria-hidden="true">
+          <div className="mordor-tint" />
+          <div className="mordor-eye">
+            <div className="mordor-eye-flame" />
+            <div className="mordor-eye-pupil" />
+          </div>
+          <div className="mordor-text cinzel">THE EYE IS UPON YOU</div>
+        </div>
+      )}
+    </>,
     document.body
   )
 }

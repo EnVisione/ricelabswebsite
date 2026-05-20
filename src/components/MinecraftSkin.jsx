@@ -1,8 +1,11 @@
 /**
- * Pulls Minecraft skin renders by username via mc-heads.net (CORS-friendly, no key).
- * - variant="body"  → full-body 3D render
- * - variant="head"  → isometric head (cube)
- * - variant="avatar" → flat 2D face avatar
+ * Pulls Minecraft skin renders by username via NMSR (nmsr.nickac.dev — no API key,
+ * CORS-friendly, resolves canonical name → UUID → live skin). mc-heads.net was
+ * returning a single placeholder for our three usernames; NMSR handles them all.
+ *
+ * - variant="body"   → full-body 3D render
+ * - variant="head"   → isometric head cube
+ * - variant="avatar" → flat 2D face (cheap, fits next to text)
  */
 export default function MinecraftSkin({
   username,
@@ -12,12 +15,13 @@ export default function MinecraftSkin({
   className,
   style,
 }) {
+  const base = 'https://nmsr.nickac.dev'
   const endpoint =
     variant === 'head'
-      ? `https://mc-heads.net/head/${username}/${size}`
+      ? `${base}/head/${username}`
       : variant === 'avatar'
-      ? `https://mc-heads.net/avatar/${username}/${size}`
-      : `https://mc-heads.net/body/${username}/${size}`
+      ? `${base}/face/${username}`
+      : `${base}/fullbody/${username}`
 
   return (
     <img

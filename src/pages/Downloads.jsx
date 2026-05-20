@@ -5,8 +5,9 @@ import { useAllProjects, fmt } from '../hooks/useCurseForge.js'
 
 const FILTERS = [
   { id: 'all', label: 'All' },
-  { id: 'envy', label: 'EnVy' },
   { id: 'nitro', label: 'Nitro' },
+  { id: 'envy', label: 'EnVy' },
+  { id: 'banane', label: 'Banane' },
   { id: 'both', label: 'Collabs' },
 ]
 
@@ -151,8 +152,14 @@ function Row({ row, rank }) {
       <div className="dl-thumb-wrap">
         <div className="dl-rank mono">#{rank}</div>
         <div
-          className="dl-thumb"
-          style={row.thumbnail ? { backgroundImage: `url("${row.thumbnail}")` } : undefined}
+          className={'dl-thumb' + (row.slug === 'over-stars-the-one-ring' ? ' dl-thumb-ooi' : '')}
+          style={
+            row.slug === 'over-stars-the-one-ring'
+              ? { backgroundImage: 'url("/TheOneRing.gif")' }
+              : row.thumbnail
+              ? { backgroundImage: `url("${row.thumbnail}")` }
+              : undefined
+          }
         />
       </div>
       <div className="dl-meta">

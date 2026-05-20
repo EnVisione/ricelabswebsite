@@ -32,6 +32,7 @@ if (!KEY) {
 const AUTHORS = {
   nitro: 102638458,
   envy: 123828682,
+  banane: 103863622,
 }
 
 // Editorial overrides that can't be inferred from CurseForge author tags alone.
@@ -79,8 +80,10 @@ function toEntry(m, owner) {
 
 const nitroMods = await fetchAuthor(AUTHORS.nitro)
 const envyMods = await fetchAuthor(AUTHORS.envy)
+const bananeMods = await fetchAuthor(AUTHORS.banane)
 
-// Deduplicate collabs by slug; if owned by both, mark 'both'.
+// Deduplicate collabs by slug; nitro+envy collabs get owner 'both' (legacy).
+// Banane is solo on his projects; any future overlap leaves the first-seen owner.
 const combined = new Map()
 for (const m of nitroMods) {
   const e = toEntry(m, 'nitro')
@@ -91,6 +94,10 @@ for (const m of envyMods) {
   const existing = combined.get(e.slug)
   if (existing) combined.set(e.slug, { ...existing, owner: 'both' })
   else combined.set(e.slug, e)
+}
+for (const m of bananeMods) {
+  const e = toEntry(m, 'banane')
+  if (!combined.has(e.slug)) combined.set(e.slug, e)
 }
 
 // Apply editorial overrides before sorting.
@@ -127,11 +134,12 @@ const out = `// Single source of truth for every RiceLabs project.
 export const AUTHOR_IDS = {
   nitro: ${AUTHORS.nitro},
   envy: ${AUTHORS.envy},
+  banane: ${AUTHORS.banane},
 }
 
 export const PROJECTS = [
   // In-development (no CF page)
-  { slug: 'over-stars-the-one-ring', name: 'Over Stars: The One Ring', type: 'MODPACK', owner: 'both', inDev: true, internalLink: '/one-ring' },
+  { slug: 'over-stars-the-one-ring', name: 'Over Stars: Origins of Indestructium', type: 'MODPACK', owner: 'both', inDev: true, internalLink: '/ool' },
 
   // Modpacks
 ${modpacks.map(stringify).join('\n')}
@@ -146,6 +154,7 @@ ${rp.map(stringify).join('\n')}
 export const OWNER_LABEL = {
   envy: 'EnVy',
   nitro: 'Nitro',
+  banane: 'Banane',
   both: 'EnVy + Nitro',
 }
 `

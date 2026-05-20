@@ -16,7 +16,7 @@ const SLUGS = Object.fromEntries(
   PROJECTS.filter((p) => p.cf).map((p) => [p.slug, p.cf])
 )
 
-const LS_PREFIX = 'ricelabs:cf:v2:'
+const LS_PREFIX = 'ricelabs:cf:v3:'
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000 // 12 hours
 
 // Only the fields the UI uses — keeps localStorage payload tiny.
@@ -28,7 +28,32 @@ function slim(raw) {
     downloads: { total: raw.downloads?.total || 0 },
     urls: { curseforge: raw.urls?.curseforge || '' },
     categories: raw.categories?.slice(0, 2) || [],
+    download: raw.download
+      ? {
+          display: raw.download.display || '',
+          name: raw.download.name || '',
+          version: raw.download.version || '',
+          versions: raw.download.versions || [],
+        }
+      : null,
   }
+}
+
+// Pulls a friendly pack version out of CurseForge's latest-file display name.
+// Examples:
+//   "Over Stars-v5.10"           → "v5.10"
+//   "IWS 26.1.2 Fabric-v2"       → "26.1.2"
+//   "IWN-v1.1"                   → "v1.1"
+//   "Some Pack 4.0"              → "4.0"
+// Used so we don't have to hand-bump version numbers on the home page.
+export function extractPackVersion(displayName) {
+  if (!displayName) return null
+  const vDot = displayName.match(/v\d+\.\d+(?:\.\d+)?/i)
+  if (vDot) return vDot[0]
+  const dotted = displayName.match(/\d+\.\d+(?:\.\d+)?/)
+  if (dotted) return dotted[0]
+  const v = displayName.match(/v\d+/i)
+  return v ? v[0] : null
 }
 
 function lsGet(key) {

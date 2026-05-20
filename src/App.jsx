@@ -22,6 +22,7 @@ import Team from './pages/Team.jsx'
 import OneRing from './pages/OneRing.jsx'
 import Envy from './pages/Envy.jsx'
 import Nitro from './pages/Nitro.jsx'
+import Banane from './pages/Banane.jsx'
 import Contact from './pages/Contact.jsx'
 import Downloads from './pages/Downloads.jsx'
 
@@ -35,9 +36,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/team" element={<Team />} />
+        <Route path="/ool" element={<OneRing />} />
         <Route path="/one-ring" element={<OneRing />} />
         <Route path="/envy" element={<Envy />} />
         <Route path="/nitro" element={<Nitro />} />
+        <Route path="/banane" element={<Banane />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/downloads" element={<Downloads />} />
       </Routes>

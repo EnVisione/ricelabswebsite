@@ -1,6 +1,7 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import MinecraftSkin from '../components/MinecraftSkin.jsx'
-import { useCurseForge, useAllProjects, fmt } from '../hooks/useCurseForge.js'
+import { useCurseForge, useAllProjects, fmt, extractPackVersion } from '../hooks/useCurseForge.js'
 import { PROJECTS } from '../data/projects.js'
 import {
   DISCORD_INVITE,
@@ -57,7 +58,19 @@ function CatalogCol({ title, projects, cfData }) {
   )
 }
 
+function PackVersionLine({ slug }) {
+  const data = useCurseForge(slug)
+  const v = extractPackVersion(data?.download?.display)
+  if (!v) return null
+  return <>{v}</>
+}
+
 export default function Nitro() {
+  useEffect(() => {
+    document.body.classList.add('nitro-theme')
+    return () => document.body.classList.remove('nitro-theme')
+  }, [])
+
   const cfData = useAllProjects()
   // Nitro's catalog = everything he owns or co-owns.
   const nitroProjects = PROJECTS.filter((p) => p.owner === 'nitro' || p.owner === 'both')
@@ -71,15 +84,15 @@ export default function Nitro() {
         <div className="ph-skin ph-skin-nitro">
           <MinecraftSkin username={SKINS.nitro} variant="body" size={170} className="mc-skin-img" />
           <div className="ph-nameplate">
-            <div className="ph-rank pixel gold">[CEO]</div>
-            <div className="ph-level pixel">LVL 99</div>
+            <div className="ph-rank pixel accent">[CEO]</div>
+            <div className="ph-level pixel accent">LVL 99</div>
           </div>
         </div>
         <div className="ph-body">
-          <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ DEV PROFILE</div>
+          <div className="section-label nitro-label">◆ DEV PROFILE</div>
           <h1 style={{ fontSize: 48, marginBottom: 12 }}>NitroRiced</h1>
           <div className="mono muted" style={{ fontSize: 13, marginBottom: 20 }}>
-            CEO · creator · designer · YouTuber · RiceLabs founder
+            CEO · Creator · Designer · YouTube · Rice Labs founder
           </div>
           <p style={{ fontSize: 16, maxWidth: '58ch' }}>
             CEO and creative force behind every pack we ship. Builds the worlds,
@@ -87,7 +100,7 @@ export default function Nitro() {
             still just makin' cool Minecraft stuff.
           </p>
           <div className="row" style={{ marginTop: 24, gap: 10 }}>
-            <div className="tag gold">CEO</div>
+            <div className="tag accent">CEO</div>
             <div className="tag">DEV</div>
             <div className="tag accent">YOUTUBE</div>
             <div className="tag purple">305 FOLLOWERS</div>
@@ -105,7 +118,7 @@ export default function Nitro() {
           </div>
           <div className="row" style={{ marginTop: 20 }}>
             <a className="btn btn-primary" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">▶ YOUTUBE</a>
-            <a className="btn btn-gold" href={CURSEFORGE_NITRO} target="_blank" rel="noopener noreferrer">◆ CURSEFORGE</a>
+            <a className="btn" href={CURSEFORGE_NITRO} target="_blank" rel="noopener noreferrer">◆ CURSEFORGE</a>
           </div>
         </div>
       </section>
@@ -123,17 +136,17 @@ export default function Nitro() {
               [total ? fmt(total) : '35.1M', 'Total downloads'],
               [String(cfCount), 'CurseForge projects'],
               ['305', 'CF followers'],
-              ['4yr', 'Creating'],
+              ['5 years', 'Creating'],
             ]
             return stats.map(([v, l]) => (
-              <div className="yt-item" key={l}><span className="pixel gold">{v}</span><small>{l}</small></div>
+              <div className="yt-item" key={l}><span className="pixel accent">{v}</span><small>{l}</small></div>
             ))
           })()}
         </div>
       </section>
 
       <section className="container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ SIGNATURE WORKS</div>
+        <div className="section-label nitro-label">◆ SIGNATURE WORKS</div>
         <h2 style={{ marginBottom: 24 }}>THE HITS</h2>
         <div className="sig-grid">
           <a className="sig-card sig-os" href="https://www.curseforge.com/minecraft/modpacks/over-stars" target="_blank" rel="noopener noreferrer">
@@ -146,7 +159,7 @@ export default function Nitro() {
               }
             />
             <div className="sig-body">
-              <div className="tag gold">MODPACK</div>
+              <div className="tag accent">MODPACK · <PackVersionLine slug="over-stars" /></div>
               <strong>OVER STARS</strong>
               <p>Tech-RPG campaign. 1000+ hand-written quests. 5 planets. 80+ biomes. His magnum opus.</p>
               <div className="mono accent"><Downloads slug="over-stars" /> downloads</div>
@@ -163,44 +176,45 @@ export default function Nitro() {
               }
             />
             <div className="sig-body">
-              <div className="tag gold">MODPACK</div>
+              <div className="tag accent">MODPACK · <PackVersionLine slug="immersed-with-shaders" /></div>
               <strong>IMMERSED WITH SHADERS</strong>
               <p>The pack that started it all. Client-side shaders, FPS, sound — vanilla server compatible.</p>
               <div className="mono accent"><Downloads slug="immersed-with-shaders" /> downloads</div>
             </div>
           </a>
 
-          <a className="sig-card" href="https://www.curseforge.com/minecraft/texture-packs/diamond-crosshair" target="_blank" rel="noopener noreferrer">
+          <a className="sig-card" href="https://www.curseforge.com/minecraft/texture-packs/simplistic-gui" target="_blank" rel="noopener noreferrer">
             <SigArt
-              slug="diamond-crosshair"
+              slug="simplistic-gui"
               fallback={
-                <div className="sig-art sig-art-diamond">
-                  <div className="diamond-shape"></div>
+                <div className="sig-art sig-art-simplistic">
+                  <div className="simplistic-shape"></div>
                 </div>
               }
             />
             <div className="sig-body">
-              <div className="tag gold">RESOURCE PACK</div>
-              <strong>DIAMOND CROSSHAIR</strong>
-              <p>Uniquely styled diamond crosshair. Millions still use it daily.</p>
-              <div className="mono accent"><Downloads slug="diamond-crosshair" /> downloads</div>
+              <div className="tag accent">RESOURCE PACK</div>
+              <strong>SIMPLISTIC GUI</strong>
+              <p>Clean, minimalist UI overhaul. A staple of the "less noise, more focus" vanilla aesthetic.</p>
+              <div className="mono accent"><Downloads slug="simplistic-gui" /> downloads</div>
             </div>
           </a>
 
-          <a className="sig-card" href="https://www.curseforge.com/minecraft/texture-packs/clean-swords" target="_blank" rel="noopener noreferrer">
+          <a className="sig-card sig-iwn" href="https://www.curseforge.com/minecraft/modpacks/iwn" target="_blank" rel="noopener noreferrer">
             <SigArt
-              slug="clean-swords"
+              slug="iwn"
               fallback={
-                <div className="sig-art sig-art-swords">
-                  <div className="sword"></div>
+                <div className="sig-art sig-art-iwn-nitro">
+                  <div className="forest"></div>
+                  <div className="mist"></div>
                 </div>
               }
             />
             <div className="sig-body">
-              <div className="tag gold">RESOURCE PACK</div>
-              <strong>CLEAN SWORDS</strong>
-              <p>Minimalist sword redesigns. Staple of the "clean vanilla" movement.</p>
-              <div className="mono accent"><Downloads slug="clean-swords" /> downloads</div>
+              <div className="tag accent">MODPACK · <PackVersionLine slug="iwn" /></div>
+              <strong>IMMERSED WITH NATURE</strong>
+              <p>One-click immersion upgrade. Shaders, FPS, weather, soundscape & worldgen on top of vanilla.</p>
+              <div className="mono accent"><Downloads slug="iwn" /> downloads</div>
             </div>
           </a>
         </div>
@@ -242,17 +256,17 @@ export default function Nitro() {
       </section>
 
       <section className="container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ CREATIVE CREDO</div>
+        <div className="section-label nitro-label">◆ CREATIVE CREDO</div>
         <h2 style={{ marginBottom: 24 }}>HOW NITRO BUILDS</h2>
-        <div className="credo-grid">
+        <div className="credo-grid credo-grid-nitro">
           {[
             ['01', 'LORE FIRST', 'A pack without story is a pile of mods. Over Stars has a four-chapter campaign because it had a story before it had a mod list.'],
             ['02', 'POLISH OVER SCOPE', 'Fewer quests, but each one hand-tuned. Fewer mods, but each one serving the pack. Pick an identity and ship it.'],
             ['03', 'SHOW YOUR WORK', 'YouTube, Discord, sneak peeks. The community gets to watch the forge, not just the finished blade.'],
-            ['04', 'ITERATE FOREVER', "Over Stars is on v5.8. IWS is on 26.x. A RiceLabs pack is never done — it's just in production."],
+            ['04', 'ITERATE FOREVER', "A RiceLabs pack is never done — it's just in production. Always a next version queued up."],
           ].map(([n, title, body]) => (
             <div className="credo" key={n}>
-              <div className="credo-num pixel gold">{n}</div>
+              <div className="credo-num pixel accent">{n}</div>
               <h3>{title}</h3>
               <p>{body}</p>
             </div>
@@ -261,7 +275,7 @@ export default function Nitro() {
       </section>
 
       <section className="container">
-        <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ THE FULL CATALOG</div>
+        <div className="section-label nitro-label">◆ THE FULL CATALOG</div>
         <h2 style={{ marginBottom: 24 }}>EVERYTHING SHIPPED</h2>
         <div className="catalog">
           <CatalogCol title="MODPACKS" projects={modpacks} cfData={cfData} />
@@ -276,17 +290,17 @@ export default function Nitro() {
       <section className="container">
         <div
           className="contact-card card"
-          style={{ background: 'linear-gradient(90deg, rgba(201,162,39,0.08), var(--panel))', borderColor: 'rgba(201,162,39,0.3)' }}
+          style={{ background: 'linear-gradient(90deg, rgba(124,194,66,0.08), var(--panel))', borderColor: 'rgba(124,194,66,0.3)' }}
         >
           <div>
-            <div className="section-label" style={{ color: 'var(--accent-2)' }}>◆ FOLLOW</div>
+            <div className="section-label nitro-label">◆ FOLLOW</div>
             <h2>Catch the next drop</h2>
             <p style={{ marginTop: 12 }}>
               Subscribe on YouTube for dev diaries, hop in Discord (<span className="accent">@{DISCORD_HANDLES.nitro}</span>) for sneak peeks, follow on CurseForge for release pings.
             </p>
           </div>
           <div className="row">
-            <a className="btn btn-gold" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">▶ YOUTUBE</a>
+            <a className="btn btn-primary" href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">▶ YOUTUBE</a>
             <a className="btn" href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">DISCORD</a>
             <Link className="btn btn-ghost" to="/team">BACK TO TEAM</Link>
           </div>

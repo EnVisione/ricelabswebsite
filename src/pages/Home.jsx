@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom'
 import HeroCanvas from '../components/HeroCanvas.jsx'
 import MinecraftSkin from '../components/MinecraftSkin.jsx'
-import { useCurseForge, useTotalDownloads, fmt } from '../hooks/useCurseForge.js'
+import { useCurseForge, useTotalDownloads, fmt, extractPackVersion } from '../hooks/useCurseForge.js'
 import { PROJECTS } from '../data/projects.js'
+import { SKINS } from '../constants.js'
 
 const PROJECT_COUNT = PROJECTS.filter((p) => p.cf).length
 
 const FEATURED = [
   { slug: 'immersed-with-shaders', label: 'Immersed With Shaders' },
   { slug: 'over-stars', label: 'Over Stars' },
-  { slug: 'diamond-crosshair', label: 'Diamond Crosshair' },
-  { slug: 'clean-swords', label: 'Clean Swords' },
+  { slug: 'simplistic-gui', label: 'Simplistic GUI' },
+  { slug: 'iwn', label: 'Immersed With Nature' },
 ]
 
 function FeaturedCell({ slug, label }) {
@@ -44,6 +45,13 @@ function PackDownloads({ slug }) {
   return <>{data?.downloads?.total ? fmt(data.downloads.total) : '…'}</>
 }
 
+function PackVersionTag({ slug, fallback, className = 'tag accent' }) {
+  const data = useCurseForge(slug)
+  const v = extractPackVersion(data?.download?.display)
+  const label = v ? `LIVE · ${v}` : fallback
+  return <div className={className}>{label}</div>
+}
+
 // EnVy's solo mod slugs, ordered by downloads at last sync.
 const ENVY_TOP = [
   'emi-gamestages-integration',
@@ -58,7 +66,7 @@ function EnvyFeatured() {
       <div className="section-label" style={{ color: '#e0533d' }}>◆ DEV WORK</div>
       <h2 style={{ marginBottom: 12 }}>ENVY'S TOP MODS</h2>
       <p style={{ marginBottom: 24, maxWidth: '62ch' }}>
-        The standalone mods EnVy ships alongside RiceLabs packs. Integration helpers, server utilities,
+        The standalone mods EnVy ships alongside Rice Labs packs. Integration helpers, server utilities,
         and gameplay tweaks — download counts pulled live from CurseForge.
       </p>
       <div className="envy-featured-grid">
@@ -120,17 +128,17 @@ export default function Home() {
             <span className="grass-underline accent">block by block.</span>
           </h1>
           <p className="hero-sub">
-            A two-person studio building deeply immersive, hand-polished Minecraft modpacks &amp; mods. Over{' '}
+            A three-person studio building deeply immersive, hand-polished Minecraft modpacks &amp; mods. Over{' '}
             <strong className="accent">{total ? total.toLocaleString('en-US') : 'loading…'}</strong> downloads and counting.
           </p>
           <div className="row" style={{ marginTop: 24 }}>
             <a className="btn btn-primary" href="#packs">▶ EXPLORE PACKS</a>
-            <Link className="btn btn-ghost" to="/one-ring">◆ OS: ONE RING</Link>
+            <Link className="btn btn-ghost btn-ooi" to="/ool">◆ OVER STARS: ORIGINS OF INDESTRUCTIUM</Link>
           </div>
           <div className="hero-stats">
             <div><span className="pixel accent">{total ? fmt(total) : '…'}</span><small>Total downloads</small></div>
             <div><span className="pixel gold">{PROJECT_COUNT}</span><small>Projects shipped</small></div>
-            <div><span className="pixel purple">2</span><small>Devs</small></div>
+            <div><span className="pixel purple">3</span><small>Devs</small></div>
             <div><span className="pixel" style={{ color: '#e0533d' }}>4yrs</span><small>Building</small></div>
           </div>
         </div>
@@ -150,15 +158,15 @@ export default function Home() {
         <h2 style={{ marginBottom: 28 }}>OUR MODPACKS</h2>
         <div className="packs-grid">
           {/* One Ring pack — internal link */}
-          <Link className="pack-card pack-os" to="/one-ring">
-            <div className="pack-art">
-              <div className="art-layer art-bg-os"></div>
-              <div className="art-ring"></div>
+          <Link className="pack-card pack-os" to="/ool">
+            <div className="pack-art pack-art-or">
+              <div className="art-bg-or"></div>
+              <img src="/TheOneRing.gif" alt="The One Ring" className="or-pack-gif" />
               <div className="art-badge">SNEAK PEEK</div>
             </div>
             <div className="pack-body">
               <div className="tag purple">IN DEVELOPMENT · 2026</div>
-              <h3>OVER STARS:<br />THE ONE RING</h3>
+              <h3 className="ooi-title"><span className="ooi-cyan">OVER STARS:</span><br /><span className="ooi-magenta">ORIGINS OF INDESTRUCTIUM</span></h3>
               <p>LOTR-inspired progressive campaign, set 300 years before Over Stars. An ancient ring of unknown alloy, forbidden powers, and a vanished journeyman's footsteps to follow.</p>
               <div className="pack-meta">
                 <span className="mono muted">→ dedicated sneak-peek page</span>
@@ -177,7 +185,7 @@ export default function Home() {
               }
             />
             <div className="pack-body">
-              <div className="tag accent">LIVE · v5.8</div>
+              <PackVersionTag slug="over-stars" fallback="LIVE" className="tag accent" />
               <h3>OVER STARS</h3>
               <p>Challenging Tech-RPG progression with a custom 4-chapter questline, 5-stage tech tree, 5 new planets, 80+ biomes, villager contracts and ferocious bosses.</p>
               <div className="pack-meta">
@@ -198,7 +206,7 @@ export default function Home() {
               }
             />
             <div className="pack-body">
-              <div className="tag gold">LIVE · 26.x</div>
+              <PackVersionTag slug="immersed-with-shaders" fallback="LIVE" className="tag gold" />
               <h3>IMMERSED<br />WITH SHADERS</h3>
               <p>Client-side visual enhancement pack. Spectacular shaders, boosted FPS, immersive soundscape, QoL mods — and still works on vanilla servers.</p>
               <div className="pack-meta">
@@ -219,7 +227,7 @@ export default function Home() {
               }
             />
             <div className="pack-body">
-              <div className="tag accent">LIVE</div>
+              <PackVersionTag slug="iwn" fallback="LIVE" className="tag accent" />
               <h3>IMMERSED<br />WITH NATURE</h3>
               <p>Upgrade vanilla immersion. Shaders, FPS, textures, weather, soundscapes, worldgen &amp; QoL — a single-click enhancement of the base game.</p>
               <div className="pack-meta">
@@ -239,42 +247,35 @@ export default function Home() {
         <div className="one-ring-progress card">
           <div className="orp-left">
             <div className="section-label" style={{ color: 'var(--accent-3)' }}>◆ IN THE FORGE</div>
-            <h2>Over Stars: The One Ring</h2>
+            <h2 className="ooi-title"><span className="ooi-cyan">Over Stars:</span> <span className="ooi-magenta">Origins of Indestructium</span></h2>
             <p className="mono" style={{ color: 'var(--ink-dim)', marginTop: 12 }}>
-              Development started 2026 · planned release TBA · follow @Sneak Peaks in Discord
+              Development started Januray 2026 · planned release TBA · follow @Sneak Peaks in Discord
             </p>
             <div className="progress-group" style={{ marginTop: 24 }}>
               {[
                 ['LORE & WORLDBUILDING', 62],
                 ['QUEST CAMPAIGN', 28],
-                ['CUSTOM MODS / RING MECHANICS', 41],
+                ['CUSTOM CONTENT', 41],
                 ['WORLD GEN & STRUCTURES', 18],
-                ['SOUNDTRACK & AUDIO', 9],
+                ['CUSTOM SOUNDTRACK & AUDIO', 9],
               ].map(([label, pct]) => (
                 <div key={label}>
                   <div className="prg-row">
                     <span className="pixel" style={{ fontSize: 9 }}>{label}</span>
-                    <span className="mono accent">{pct}%</span>
+                    <span className="mono ooi-cyan">{pct}%</span>
                   </div>
                   <div className="progress"><div className="progress-fill" style={{ width: `${pct}%` }}></div></div>
                 </div>
               ))}
             </div>
             <div className="row" style={{ marginTop: 24 }}>
-              <Link className="btn btn-gold" to="/one-ring">◆ READ THE TEASER</Link>
+              <Link className="btn btn-ooi" to="/ool">◆ READ THE TEASER</Link>
               <Link className="btn btn-ghost" to="/contact">GET THE ROLE</Link>
             </div>
           </div>
           <div className="orp-right">
             <div className="ring-anim">
-              <div className="ring-glow"></div>
-              <div className="ring-band">
-                <div className="runes pixel">ᛟ · ᚱ · ᛁ · ᚲ · ᛖ · ᛚ · ᚨ · ᛒ · ᛋ</div>
-              </div>
-              <div className="ring-band ring-band-2">
-                <div className="runes pixel">300 YRS · UNKNOWN ALLOYS · FORBIDDEN</div>
-              </div>
-              <div className="ring-pedestal"></div>
+              <img src="/TheOneRing.gif" alt="The One Ring" className="ring-gif" />
             </div>
           </div>
         </div>
@@ -285,10 +286,11 @@ export default function Home() {
         <div className="about-grid">
           <div>
             <div className="section-label">◆ WHO WE ARE</div>
-            <h2>Two devs, one forge.</h2>
+            <h2>Three devs, one forge.</h2>
             <p style={{ marginTop: 16 }}>
-              RiceLabs is <strong className="accent">NitroRiced</strong> (CEO — creative direction, YouTube) and{' '}
-              <strong className="accent">EnVy</strong> (CTO — development, server ops, mod work). Small on purpose — every quest is hand-written, every balance pass is personal.
+              Rice Labs is <strong className="accent">NitroRiced</strong> (CEO — Founder, Creative Direction, Modpack Development, YouTube),{' '}
+              <strong className="accent">EnVy</strong> (CTO — Development, Server Operations, Mod Work, Expert Coder), and{' '}
+              <strong className="accent">Banane</strong> (Co-Dev — Modpack Development, Resource Packs, 3.1M+ downloads of his own). Small on purpose — every quest is hand-written, every balance pass is personal.
             </p>
             <div className="row" style={{ marginTop: 20 }}>
               <Link className="btn" to="/team">◆ MEET THE TEAM</Link>
@@ -297,21 +299,30 @@ export default function Home() {
           </div>
           <div className="stack">
             <Link to="/nitro" className="about-card about-card-nitro">
-              <MinecraftSkin username="Nitroriced" variant="avatar" size={64} className="about-skin" />
+              <MinecraftSkin username={SKINS.nitro} variant="avatar" size={64} className="about-skin" />
               <div>
                 <h3 style={{ fontSize: 12 }}>NITRORICED</h3>
                 <div className="mono muted" style={{ fontSize: 11 }}>CEO · Creative · YouTube</div>
                 <p style={{ fontSize: 13, marginTop: 8 }}>Runs the show. Series creator, designer-in-chief, content machine.</p>
-                <div className="about-cta gold">VIEW PROFILE →</div>
+                <div className="about-cta">VIEW PROFILE →</div>
               </div>
             </Link>
             <Link to="/envy" className="about-card about-card-envy">
-              <MinecraftSkin username="EnVyOnMyMind" variant="avatar" size={64} className="about-skin" />
+              <MinecraftSkin username={SKINS.envy} variant="avatar" size={64} className="about-skin" />
               <div>
                 <h3 style={{ fontSize: 12 }}>ENVY</h3>
                 <div className="mono muted" style={{ fontSize: 11 }}>CTO · Developer · Server Ops</div>
                 <p style={{ fontSize: 13, marginTop: 8 }}>Builds the tech. Ships mods, runs the official Over Stars server, handles improvements.</p>
                 <div className="about-cta" style={{ color: '#e0533d' }}>VIEW PROFILE →</div>
+              </div>
+            </Link>
+            <Link to="/banane" className="about-card about-card-banane">
+              <MinecraftSkin username={SKINS.banane} variant="avatar" size={64} className="about-skin" />
+              <div>
+                <h3 style={{ fontSize: 12 }}>BANANE</h3>
+                <div className="mono muted" style={{ fontSize: 11 }}>Co-Dev · Modpacks · Resource Packs</div>
+                <p style={{ fontSize: 13, marginTop: 8 }}>Modpack builder behind the All in One series + a stable of clean resource packs. 3.1M+ downloads.</p>
+                <div className="about-cta gold">VIEW PROFILE →</div>
               </div>
             </Link>
           </div>

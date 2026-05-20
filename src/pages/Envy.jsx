@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom'
 import MinecraftSkin from '../components/MinecraftSkin.jsx'
 import Terminal from '../components/Terminal.jsx'
 import { useCurseForge, fmt } from '../hooks/useCurseForge.js'
+import {
+  useServerStatus,
+  useNextRestart,
+  formatRelativeAgo,
+  formatCountdown,
+} from '../hooks/useServerStatus.js'
 import { DISCORD_INVITE, DISCORD_HANDLES, SKINS, CURSEFORGE_ENVY } from '../constants.js'
 
 // Everything EnVy has shipped on CurseForge, plus the One Ring collab.
@@ -11,7 +17,7 @@ const PROJECTS = [
     slug: 'emi-gamestages-integration',
     name: 'EMI Gamestages Integration',
     type: 'MOD · BUILT FOR OVER STARS',
-    downloads: 54_124,
+    downloads: 63_760,
     url: 'https://www.curseforge.com/minecraft/mc-mods/emi-gamestages-integration',
     tag: 'solo',
     builtFor: 'over-stars',
@@ -20,7 +26,7 @@ const PROJECTS = [
     slug: 'create-dupe-patch',
     name: 'Create Dupe Patch',
     type: 'MOD',
-    downloads: 29_408,
+    downloads: 38_979,
     url: 'https://www.curseforge.com/minecraft/mc-mods/create-dupe-patch',
     tag: 'solo',
   },
@@ -28,16 +34,24 @@ const PROJECTS = [
     slug: 'integratedplaytime',
     name: 'IntegratedPlaytime',
     type: 'MOD · BUILT FOR OVER STARS',
-    downloads: 17_467,
+    downloads: 30_394,
     url: 'https://www.curseforge.com/minecraft/mc-mods/integratedplaytime',
     tag: 'solo',
     builtFor: 'over-stars',
   },
   {
+    slug: 'future-shops',
+    name: 'Future Shops',
+    type: 'MOD',
+    downloads: 9_424,
+    url: 'https://www.curseforge.com/minecraft/mc-mods/future-shops',
+    tag: 'solo',
+  },
+  {
     slug: 'progressivestages',
     name: 'ProgressiveStages',
     type: 'MOD',
-    downloads: 1_780,
+    downloads: 3_876,
     url: 'https://www.curseforge.com/minecraft/mc-mods/progressivestages',
     tag: 'solo',
   },
@@ -45,7 +59,7 @@ const PROJECTS = [
     slug: 'server-essentials-forge',
     name: 'Server Essentials Forge',
     type: 'MOD',
-    downloads: 196,
+    downloads: 278,
     url: 'https://www.curseforge.com/minecraft/mc-mods/server-essentials-forge',
     tag: 'solo',
   },
@@ -53,18 +67,18 @@ const PROJECTS = [
     slug: 'opacfixes',
     name: 'OpacFixes',
     type: 'MOD',
-    downloads: 91,
+    downloads: 195,
     url: 'https://www.curseforge.com/minecraft/mc-mods/opacfixes',
     tag: 'solo',
   },
   // One Ring is the only collab EnVy claims credit on.
   {
     slug: null,
-    name: 'Over Stars: The One Ring',
+    name: 'Over Stars: Origins of Indestructium',
     type: 'MODPACK · WITH NITRO · IN DEV',
     downloads: null,
     url: null,
-    internal: '/one-ring',
+    internal: '/ool',
     tag: 'dev',
   },
 ]
@@ -120,6 +134,62 @@ function ProjectCard({ project }) {
   )
 }
 
+function HostCard() {
+  const s = useServerStatus()
+  const next = useNextRestart()
+  const live = s.online
+  const d = s.data
+  const players = d?.players ? `${d.players.online}/${d.players.max}` : '—'
+  const tps = d?.tps != null ? d.tps.toFixed(2) : '—'
+  const sinceRestart = d?.uptimeMs != null ? formatRelativeAgo(d.uptimeMs) : '—'
+  const nextIn = formatCountdown(next.secondsUntil)
+
+  return (
+    <div className="host-card card">
+      <div className="host-left">
+        <div className="host-status">
+          <span
+            className="host-dot"
+            aria-hidden="true"
+            style={
+              live
+                ? undefined
+                : { background: '#e0533d', boxShadow: '0 0 10px #e0533d' }
+            }
+          />
+          <span className="mono">
+            {live ? 'LIVE · ACCEPTING CONNECTIONS' : s.loaded ? 'OFFLINE · AWAITING RECONNECT' : 'CONNECTING…'}
+          </span>
+        </div>
+        <h3 style={{ marginTop: 10, fontSize: 14 }}>OVER STARS · OFFICIAL SERVER</h3>
+        {d?.motd && (
+          <div className="mono muted" style={{ fontSize: 11, marginTop: 6 }}>
+            MOTD: {d.motd}
+          </div>
+        )}
+        <p style={{ fontSize: 13, marginTop: 10 }}>
+          The official Rice Labs-run Over Stars Minecraft server — hosted, patched,
+          backed up, and kept at 20 TPS by me. If you're joining the community campaign,
+          you're landing on my hardware.
+        </p>
+        <div className="row" style={{ marginTop: 16 }}>
+          <a className="btn btn-primary" href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">◆ JOIN IN DISCORD</a>
+          <a className="btn btn-ghost" href="https://www.curseforge.com/minecraft/modpacks/over-stars" target="_blank" rel="noopener noreferrer">PACK ON CURSEFORGE</a>
+        </div>
+      </div>
+      <div className="host-right">
+        <div className="host-stat"><span className="pixel">{players}</span><small>Players</small></div>
+        <div className="host-stat"><span className="pixel">{tps}</span><small>TPS</small></div>
+        <div className="host-stat"><span className="pixel">{sinceRestart}</span><small>Last Restart</small></div>
+        <div className="host-stat" title={`Next restart: ${next.nextTimeLabel}`}>
+          <span className="pixel">{nextIn}</span>
+          <small>Next Restart</small>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Envy() {
   useEffect(() => {
     document.body.classList.add('envy-theme')
@@ -140,7 +210,7 @@ export default function Envy() {
           <h1 style={{ fontSize: 48, marginBottom: 12 }}>EnVy</h1>
           <div className="mono muted" style={{ fontSize: 13, marginBottom: 20 }}>aka the brains · aka the tech dept.</div>
           <p style={{ fontSize: 16, maxWidth: '58ch' }}>
-            CTO at RiceLabs. I build the mods, I run the official Over Stars
+            CTO at Rice Labs. I build the mods, I run the official Over Stars
             Minecraft server, and I own every technological improvement that keeps
             the studio shipping. If it compiles, runs, or gets deployed &mdash; it probably went through me.
           </p>
@@ -182,30 +252,7 @@ export default function Envy() {
       <section className="container">
         <div className="section-label envy-label">◆ OFFICIAL SERVER HOSTING</div>
         <h2 style={{ marginBottom: 18 }}>I HOST THE OVER STARS SERVER</h2>
-        <div className="host-card card">
-          <div className="host-left">
-            <div className="host-status">
-              <span className="host-dot" aria-hidden="true" />
-              <span className="mono">LIVE · ACCEPTING CONNECTIONS</span>
-            </div>
-            <h3 style={{ marginTop: 10, fontSize: 14 }}>OVER STARS · OFFICIAL SERVER</h3>
-            <p style={{ fontSize: 13, marginTop: 10 }}>
-              The official RiceLabs-run Over Stars Minecraft server — hosted, patched,
-              backed up, and kept at 20 TPS by me. If you're joining the community campaign,
-              you're landing on my hardware.
-            </p>
-            <div className="row" style={{ marginTop: 16 }}>
-              <a className="btn btn-primary" href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">◆ JOIN IN DISCORD</a>
-              <a className="btn btn-ghost" href="https://www.curseforge.com/minecraft/modpacks/over-stars" target="_blank" rel="noopener noreferrer">PACK ON CURSEFORGE</a>
-            </div>
-          </div>
-          <div className="host-right">
-            <div className="host-stat"><span className="pixel">42d</span><small>Uptime</small></div>
-            <div className="host-stat"><span className="pixel">19.97</span><small>TPS</small></div>
-            <div className="host-stat"><span className="pixel">47</span><small>Players</small></div>
-            <div className="host-stat"><span className="pixel">v5.8</span><small>Pack</small></div>
-          </div>
-        </div>
+        <HostCard />
         <p className="mono muted" style={{ marginTop: 14, fontSize: 11 }}>
           Deployments, player support, backups, exploit patches — all handled by me personally.
         </p>
@@ -216,13 +263,13 @@ export default function Envy() {
         <div className="cmd-grid">
           <div>
             <div className="section-label envy-label">◆ MY ROLES</div>
-            <h2 style={{ marginBottom: 20 }}>WHAT I DO AT RICELABS</h2>
+            <h2 style={{ marginBottom: 20 }}>WHAT I DO AT RICE LABS</h2>
             <div className="role-grid">
               {[
-                ['⚒', 'MOD DEVELOPMENT', 'Write the custom mods that power our packs. Ring mechanics, quest integrations, dupe patches, playtime tracking — the stuff that makes RiceLabs packs actually unique.', '→ Java · Forge · NeoForge'],
+                ['⚒', 'MOD DEVELOPMENT', 'Write the custom mods that power our packs. Ring mechanics, quest integrations, dupe patches, playtime tracking — the stuff that makes Rice Labs packs actually unique.', '→ Java · Forge · NeoForge'],
                 ['⛵', 'OFFICIAL SERVER OPS', 'Run the official Over Stars Minecraft server. Uptime, mod deployments, player support, backups, exploit patches — the whole kit.', '→ Forge server · Linux · ops'],
                 ['◆', 'TECH IMPROVEMENTS', "Owner of the studio's technical roadmap. If there's a workflow, a tool, or a pipeline that could be better — that's where I spend my time.", '→ DX · infra · tooling'],
-                ['▲', 'WEB & BRAND', 'Building the RiceLabs website — this one — and helping Nitro with anything technical that lives outside the game client.', '→ React · HTML · CSS · JS'],
+                ['▲', 'WEB & BRAND', 'Building the Rice Labs website — this one — and helping Nitro with anything technical that lives outside the game client.', '→ React · HTML · CSS · JS'],
               ].map(([icon, title, body, meta]) => (
                 <div className="role" key={title}>
                   <div className="role-icon">{icon}</div>
@@ -271,12 +318,12 @@ export default function Envy() {
         <h2 style={{ marginBottom: 24 }}>UNLOCKED</h2>
         <div className="ach-grid">
           {[
-            ['⛏', 'Taking Inventory', 'Shipped my first mod for a RiceLabs pack.'],
+            ['⛏', 'Taking Inventory', 'Shipped my first mod for a Rice Labs pack.'],
             ['⚒', 'Acquire Hardware', 'Stood up the Over Stars official server and kept it alive through launch.'],
-            ['◆', 'Diamonds!', 'Promoted to CTO — officially running the tech at RiceLabs.'],
-            ['✦', 'The End?', 'Helped design the mod architecture for Over Stars: The One Ring.', 'ach-rare'],
-            ['▲', 'Getting an Upgrade', "Built the RiceLabs website from scratch. You're looking at it."],
-            ['?', '???', 'Locked until OS: The One Ring ships.', '', true],
+            ['◆', 'Diamonds!', 'Promoted to CTO — officially running the tech at Rice Labs.'],
+            ['✦', 'The End?', 'Helped design the mod architecture for Over Stars: Origins of Indestructium.', 'ach-rare'],
+            ['▲', 'Getting an Upgrade', "Built the Rice Labs website from scratch. You're looking at it."],
+            ['?', '???', 'Locked until OS: Origins of Indestructium ships.', '', true],
           ].map(([icon, title, body, iconClass, locked]) => (
             <div key={title} className={'ach ' + (locked ? 'locked' : '')}>
               <div className={'ach-icon ' + (iconClass || '')}>{icon}</div>
@@ -294,10 +341,10 @@ export default function Envy() {
         <h2 style={{ marginBottom: 24 }}>ACTIVE FRONTS</h2>
         <div className="quest-list">
           {[
-            ['accent', 'ACTIVE', 'OS: The One Ring — mod systems', 'Designing and prototyping the custom ring mechanics, curse-system hooks, and supporting content mods.', '◆ Co-dev'],
+            ['accent', 'ACTIVE', 'OS: Origins of Indestructium — mod systems', 'Designing and prototyping the custom ring mechanics, curse-system hooks, and supporting content mods.', '◆ Co-dev'],
             ['accent', 'ACTIVE', 'Over Stars official server', 'Keeping the live server healthy through the v5.x release cadence. Mod pushes, player reports, incident response.', '⚒ Ops'],
-            ['gold', 'IN PROGRESS', 'ricelabs.dev — studio site', 'This website. Hub for packs, team, dev updates, and the One Ring sneak peek.', '▲ Web'],
-            ['purple', 'PLANNED', 'ProgressiveStages · next', 'Iterating on stage-gated progression for the next-gen RiceLabs pack.', '◆ Mod'],
+            ['gold', 'IN PROGRESS', 'ricelabs.dev — studio site', 'This website. Hub for packs, team, dev updates, and the Origins of Indestructium sneak peek.', '▲ Web'],
+            ['purple', 'PLANNED', 'ProgressiveStages · next', 'Iterating on stage-gated progression for the next-gen Rice Labs pack.', '◆ Mod'],
           ].map(([color, state, title, body, reward], i) => (
             <div className="quest" key={i}>
               <div className={'quest-state pixel ' + color}>{state}</div>
@@ -317,7 +364,7 @@ export default function Envy() {
             <div className="section-label envy-label">◆ PING ME</div>
             <h2>Need something technical?</h2>
             <p style={{ marginTop: 12 }}>
-              Best caught in the RiceLabs Discord — ping <span className="accent">@{DISCORD_HANDLES.envy}</span> for bugs, server issues, mod questions, or just to say hi.
+              Best caught in the Rice Labs Discord — ping <span className="accent">@{DISCORD_HANDLES.envy}</span> for bugs, server issues, mod questions, or just to say hi.
             </p>
           </div>
           <div className="row">

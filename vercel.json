@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/:path((?!assets|og-image\\.jpg|favicon\\.svg|manifest\\.webmanifest|robots\\.txt|sitemap\\.xml|icons\\.svg).*)", "destination": "/index.html" }
+    { "source": "/:path((?!assets|og-image\\.jpg|favicon\\.svg|rice_labs_logo\\.png|manifest\\.webmanifest|robots\\.txt|sitemap\\.xml|icons\\.svg).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

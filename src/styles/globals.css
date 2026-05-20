@@ -52,16 +52,10 @@ a{ color:inherit; text-decoration:none; }
 }
 .brand{ display:flex; align-items:center; gap:12px; font-weight:700;}
 .brand-logo{
-  width:32px; height:32px; position:relative;
-  background: linear-gradient(135deg, #7CC242 0%, #5a9a2d 60%, #3f7020 100%);
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.25), inset 2px 2px 0 rgba(255,255,255,0.15);
+  width:32px; height:32px;
+  object-fit:contain;
   image-rendering: pixelated;
-}
-.brand-logo::after{
-  content:""; position:absolute; inset:4px;
-  background:
-    linear-gradient(#8b5a3c,#8b5a3c) 0 0/100% 40% no-repeat,
-    linear-gradient(#7CC242,#7CC242) 0 60%/100% 40% no-repeat;
+  display:block;
 }
 .brand-name{ font-family:'Press Start 2P', monospace; font-size:12px; letter-spacing:0.05em;}
 .brand-name em{ color:var(--accent); font-style:normal; }
@@ -72,6 +66,23 @@ a{ color:inherit; text-decoration:none; }
 }
 .nav-link:hover{ color:var(--ink); background:var(--panel);}
 .nav-link.active{ color:var(--accent); background:rgba(124,194,66,0.08);}
+
+/* Per-route active tint — match each owner's color so the active state
+   doesn't always read "green". Attribute selectors target NavLink's
+   rendered <a href="..."> output. */
+.nav-link[href="/nitro"].active{
+  color:var(--accent); background:rgba(124,194,66,0.10);
+}
+.nav-link[href="/envy"].active{
+  color:#e0533d; background:rgba(224,83,61,0.10);
+}
+.nav-link[href="/banane"].active{
+  color:var(--accent-2); background:rgba(201,162,39,0.12);
+}
+.nav-link[href="/ool"].active{
+  color:#ff3df0; background:rgba(255,61,240,0.10);
+  text-shadow: 0 0 8px rgba(255,61,240,0.4), 0 0 14px rgba(0,229,255,0.25);
+}
 .nav-cta{
   padding:8px 14px; background:var(--accent); color:#0b1405; border-radius:6px;
   font-weight:700; font-size:13px; box-shadow: 0 3px 0 #3f7020;
@@ -79,6 +90,18 @@ a{ color:inherit; text-decoration:none; }
 }
 .nav-cta:hover{ transform: translateY(-1px);}
 .nav-cta:active{ transform: translateY(2px); box-shadow: 0 0 0 #3f7020;}
+.nav-cta-donate{
+  background: var(--accent-2); color:#201700;
+  box-shadow: 0 3px 0 #6d5714;
+  border:0; cursor:pointer; font-family: inherit;
+}
+.nav-cta-donate:active{ box-shadow: 0 0 0 #6d5714;}
+.nav-drawer-donate{
+  width:100%; text-align:left; border:0; cursor:pointer;
+  background: rgba(201,162,39,0.10); color: var(--accent-2);
+  margin-top:10px; font-family:'Press Start 2P', monospace;
+}
+.nav-drawer-donate:hover{ background: rgba(201,162,39,0.18);}
 
 /* Generic layout */
 .container{ max-width:1280px; margin:0 auto; padding: 48px 24px; width:100%;}
@@ -232,6 +255,14 @@ body > .bg-voxels{
 .nav-drawer-link:hover{ color:var(--ink); background:var(--bg-3);}
 .nav-drawer-link.active{
   color:var(--accent); background: rgba(124,194,66,0.1);
+}
+/* Drawer (mobile) active tints — mirror the desktop nav-link rules. */
+.nav-drawer-link[href="/nitro"].active{ color:var(--accent); background:rgba(124,194,66,0.12);}
+.nav-drawer-link[href="/envy"].active{ color:#e0533d; background:rgba(224,83,61,0.12);}
+.nav-drawer-link[href="/banane"].active{ color:var(--accent-2); background:rgba(201,162,39,0.14);}
+.nav-drawer-link[href="/ool"].active{
+  color:#ff3df0; background:rgba(255,61,240,0.12);
+  text-shadow: 0 0 8px rgba(255,61,240,0.4), 0 0 14px rgba(0,229,255,0.25);
 }
 
 @media (max-width: 760px){
