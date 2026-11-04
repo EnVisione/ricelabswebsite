@@ -1,25 +1,31 @@
-# CODING AGENTS: READ THIS FIRST
+# Rice Labs website
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+The Rice Labs website presents the team's Minecraft modpacks, projects, and members. It includes pages for the team, downloads, contact information, and Over Stars: The One Ring.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Run locally
 
-## What you should do — IMPORTANT
+Use a current Node.js version supported by Vite 8.
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `ricelabs-website/chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+```sh
+npm ci
+npm run dev
+```
 
-**Read `ricelabs-website/project/index.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+Open the local address printed by Vite. For a production build and a local preview:
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+```sh
+npm run build
+npm run preview
+```
 
-## About the design files
+Run the repository's lint check with `npm run lint`.
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+## Project layout
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+- `src/pages/` contains the site's pages.
+- `src/components/` contains shared interface components.
+- `src/data/` contains page and project data.
+- `public/` contains assets served directly.
+- `scripts/` contains project-data, prerendering, and sitemap tasks used by the build.
 
-## Bundle contents
-
-- `ricelabs-website/README.md` — this file
-- `ricelabs-website/chats/` — conversation transcripts (read these!)
-- `ricelabs-website/project/` — the `RiceLabs Website` project files (HTML prototypes, assets, components)
+The repository also includes [server-status relay setup notes](docs/configuration/documentation.md) for the website's live Minecraft server status.
