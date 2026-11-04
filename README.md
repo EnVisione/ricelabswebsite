@@ -28,4 +28,4 @@ Run the repository's lint check with `npm run lint`.
 - `public/` contains assets served directly.
 - `scripts/` contains project-data, prerendering, and sitemap tasks used by the build.
 
-The repository also includes [server-status relay setup notes](CLOUDFLARE_SETUP.md) for the website's live Minecraft server status.
+The repository also includes [server-status relay setup notes](docs/configuration/documentation.md) for the website's live Minecraft server status.
